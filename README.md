@@ -8,8 +8,9 @@ Korean Automata Project in KAIST CS322
 Files
 -----
 - DFA.py : DFA Implementation
+- ME.py : Mealy Machine Implementation
 - test.py : Testing code
-- test.json : Test DFA in json form
+- test.json : Test DFA and ME in json form
 
 Requirements
 ------------
@@ -29,8 +30,11 @@ Run
 ---
 ```python
 import DFA
-A = DFA.FromFile("test.json")
+import ME
+A = DFA.DFA.FromFile("test.json")
 print A.query("01011")
+B = ME.ME.FromFile("test.json")
+print B.query("01011")
 ```
 
 Input
@@ -44,6 +48,11 @@ Input
 			"vocabulary": "next state"
 		}
 	},
+	"outp": { // for ME
+		"state": {
+			"vocabulary": "output object"
+		}
+	},
 	"init": "", // an initial state
-	"fini": [] // list of final states..
+	"fini": [] // for DFA, list of final states..
 }
