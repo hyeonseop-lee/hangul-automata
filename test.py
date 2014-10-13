@@ -1,6 +1,6 @@
 import DFA
 
-A = DFA.FromFile("test.json")
+A = DFA.DFA.FromFile("test.json")
 A.query("000", True)
 A.query("011", True)
 A.query("01101101", True)

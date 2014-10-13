@@ -1,13 +1,6 @@
 # DFA.py
 import json
 
-def FromJson(obj):
-    return DFA(json.loads(obj))
-
-def FromFile(path):
-    with open(path, "r") as f:
-        return FromJson(f.read())
-
 class DFA:
     def __init__(self, obj):
         self.states = obj["states"]
@@ -40,3 +33,12 @@ class DFA:
         if debug:
             print "%s : %s" % (repr(inp), r)
         return r
+
+    @classmethod
+    def FromJson(cls, obj):
+        return cls(json.loads(obj))
+
+    @classmethod
+    def FromFile(cls, path):
+        with open(path, "r") as f:
+            return cls.FromJson(f.read())
