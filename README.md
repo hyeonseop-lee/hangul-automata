@@ -56,3 +56,4 @@ Input
 	"init": "", // an initial state
 	"fini": [] // for DFA, list of final states..
 }
+```
