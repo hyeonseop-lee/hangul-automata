@@ -22,7 +22,7 @@ class HME(ME.ME):
             outp[i] = {}
 
         for i in "VOUAIKNRL":
-            func[i][u"\x7f"] = "S"
+            func[i][u"\x7f"] = "L"
             outp[i][u"\x7f"] = lambda s, v, n: s[1:]
 
         for i in Jaeum + MultiJaeum:
@@ -39,7 +39,7 @@ class HME(ME.ME):
                 func[i][j] = "I"
         for i in "KNRL":
             for j in Moeum:
-                outp[i][j] = lambda s, v, n: [(s[0][0] + HME.Join(s[0][1][:-1]), [s[0][1][-1], v], n), (s[0][0] + HME.Join(s[0][1][:-1]), [s[0][1][-1]], n), (s[0][0] + HME.Join(s[0][1][:-1]), [], n)] + s[len(s[0][1]):]
+                outp[i][j] = lambda s, v, n: [(s[0][0] + HME.Join(s[0][1][:-1]), [s[0][1][-1], v], n), (s[0][0] + HME.Join(s[0][1][:-1]), [s[0][1][-1]], s[0][2]), (s[0][0] + HME.Join(s[0][1][:-1]), [], "L")] + s[len(s[0][1]):]
 
         func["O"][u"ㅏ"] = "A"
         func["O"][u"ㅣ"] = "I"
@@ -70,7 +70,7 @@ class HME(ME.ME):
             for j in Jaeum + MultiJaeum:
                 if not j in func[i]:
                     func[i][j] = "V"
-                    outp[i][j] = lambda s, v, n: [(s[0][0] + HME.Join(s[0][1]), [v], n)] + [(s[0][0] + HME.Join(s[0][1]), [], n)] + s[len(s[0][1]):]
+                    outp[i][j] = lambda s, v, n: [(s[0][0] + HME.Join(s[0][1]), [v], n)] + [(s[0][0] + HME.Join(s[0][1]), [], "L")] + s[len(s[0][1]):]
 
         for i in func:
             for j in func[i]:
