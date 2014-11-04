@@ -22,6 +22,3 @@ if __name__ == "__main__":
             sys.stdout.write("\r" + "  " * len(hme.current()))
             hme.move(h)
             sys.stdout.write("\r" + hme.current())
-        else:
-            hme = HME.HME()
-            sys.stdout.write("\n");

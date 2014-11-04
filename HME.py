@@ -82,8 +82,11 @@ class HME(ME.ME):
         self.inp = []
 
     def move(self, voca, debug=False):
-        self.stack = ME.ME.move(self, voca, debug)(self.stack, voca, self.now)
-        self.now = self.stack[0][2]
+        res = ME.ME.move(self, voca, debug)
+        if res:
+            self.stack = res(self.stack, voca, self.now)
+            self.now = self.stack[0][2]
+        return bool(res)
 
     @classmethod
     def Join(cls, buf, Chosung=False):
