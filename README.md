@@ -5,16 +5,21 @@ Korean Automata Project in KAIST CS322
 - Implemeted on OS X
 - Built on Python 2.7
 
+Dependencies
+------------
+- hangul.py : http://sugarcube.cvs.sourceforge.net/viewvc/sugarcube/plugins/HangulConvert/hangul.py
+- python getch : http://pypi.python.org/pypi/getch
+
 Files
 -----
 - DFA.py : DFA Implementation
 - ME.py : Mealy Machine Implementation
-- test.py : Testing code
-- test.json : Test DFA and ME in json form
+- HME.py : Hangul Mealy Machine Implementation
+- hangul.py : Korean unicode utility by perky@FreeBSD.org
+- main.py : Main code to execute Hangul Automata
 
 Requirements
 ------------
-
 - Python 2.7
 - virtualenv
 
@@ -28,32 +33,6 @@ pip install -r requirements.txt
 
 Run
 ---
-```python
-import DFA
-import ME
-A = DFA.DFA.FromFile("test.json")
-print A.query("01011")
-B = ME.ME.FromFile("test.json")
-print B.query("01011")
-```
-
-Input
------
-```json
-{
-	"states": [], // list of states..
-	"voca": [], // list of vocabularies..
-	"func": {
-		"state": {
-			"vocabulary": "next state"
-		}
-	},
-	"outp": { // for ME
-		"state": {
-			"vocabulary": "output object"
-		}
-	},
-	"init": "", // an initial state
-	"fini": [] // for DFA, list of final states..
-}
+```sh
+python main.py
 ```
