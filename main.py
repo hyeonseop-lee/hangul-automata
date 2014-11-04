@@ -14,7 +14,7 @@ for i in range(52):
     asc2han[asc[i]] = han[i]
 
 if __name__ == "__main__":
-    hme = HME.HME()
+    hme = HME.HME(True)
     while True:
         c = getch.getch()
         if c in asc2han:

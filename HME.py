@@ -15,6 +15,7 @@ class HME(ME.ME):
         self.outp = outp = {}
         self.func = func = {}
         self.init = "S"
+        self.Chosung = Chosung
         self.stack = [("", [], self.init)]
 
         for i in self.states:
@@ -85,8 +86,8 @@ class HME(ME.ME):
         self.now = self.stack[0][2]
 
     @classmethod
-    def Join(cls, buf):
-        cho, jung, jong = [], [], []
+    def Join(cls, buf, Chosung=False):
+        cho, jung, jong, ncho = [], [], [], u""
         while len(buf) and hangul.isJaeum(buf[0]):
             cho.append(buf[0])
             buf = buf[1:]
@@ -116,6 +117,9 @@ class HME(ME.ME):
         while len(buf) and hangul.isJaeum(buf[0]):
             jong.append(buf[0])
             buf = buf[1:]
+        if len(jong) != 0 and Chosung:
+            ncho = jong[-1]
+            jong = jong[:-1]
         if len(jong) == 0:
             jong = u""
         elif len(jong) == 1:
@@ -125,8 +129,10 @@ class HME(ME.ME):
                 if hangul.Jaeum.MultiElement[i] == (jong[0], jong[1]):
                     jong = i
                     break
-
-        return hangul.join((cho, jung, jong))
+        res = hangul.join((cho, jung, jong))
+        if ncho != u"":
+            res += ncho
+        return res
 
     def current(self):
-        return self.stack[0][0] + self.Join(self.stack[0][1])
+        return self.stack[0][0] + self.Join(self.stack[0][1], self.Chosung)
