@@ -34,7 +34,7 @@ class HME(ME.ME):
                 func[i][j] = "I"
         for i in "KNRL":
             for j in Moeum:
-                outp[i][j] = lambda s, v, n: [(s[0][0] + HME.join(s[0][1][:-1]), s[0][1][-1:] + [v], n)] + s
+                outp[i][j] = lambda s, v, n: [(s[0][0] + HME.Join(s[0][1][:-1]), [s[0][1][-1], v], n), (s[0][0] + HME.Join(s[0][1][:-1]), [s[0][1][-1]], n), (s[0][0] + HME.Join(s[0][1][:-1]), [], n)] + s[len(s[0][1]):]
 
         func["O"][u"ㅏ"] = "A"
         func["O"][u"ㅣ"] = "I"
@@ -65,9 +65,62 @@ class HME(ME.ME):
             for j in Jaeum + MultiJaeum:
                 if not j in func[i]:
                     func[i][j] = "V"
-                    outp[i][j] = lambda s, v, n: [(s[0][0] + HME.join(s[0][1]), [v], n)] + s
+                    outp[i][j] = lambda s, v, n: [(s[0][0] + HME.Join(s[0][1]), [v], n)] + [(s[0][0] + HME.Join(s[0][1]), [], n)] + s[len(s[0][1]):]
 
         for i in func:
             for j in func[i]:
                 if not j in outp[i]:
                     outp[i][j] = lambda s, v, n: [(s[0][0], s[0][1] + [v], n)] + s
+
+        self.now = self.init
+        self.inp = []
+
+    def move(self, voca, debug=False):
+        self.stack = ME.ME.move(self, voca, debug)(self.stack, voca, self.now)
+
+    @classmethod
+    def Join(cls, buf):
+        cho, jung, jong = [], [], []
+        while len(buf) and hangul.isJaeum(buf[0]):
+            cho.append(buf[0])
+            buf = buf[1:]
+        if len(cho) == 0:
+            cho = u""
+        elif len(cho) == 1:
+            cho = cho[0]
+        else:
+            for i in hangul.Jaeum.MultiElement:
+                if hangul.Jaeum.MultiElement[i] == (cho[0], cho[1]):
+                    cho = i
+                    break
+
+        while len(buf) and hangul.isMoeum(buf[0]):
+            jung.append(buf[0])
+            buf = buf[1:]
+        if len(jung) == 0:
+            jung = u""
+        elif len(jung) == 1:
+            jung = jung[0]
+        else:
+            for i in hangul.Moeum.MultiElement:
+                if hangul.Moeum.MultiElement[i] == (jung[0], jung[1]):
+                    jung = i
+                    break
+
+        while len(buf) and hangul.isJaeum(buf[0]):
+            jong.append(buf[0])
+            buf = buf[1:]
+        if len(jong) == 0:
+            jong = u""
+        elif len(jong) == 1:
+            jong = jong[0]
+        else:
+            for i in hangul.Jaeum.MultiElement:
+                if hangul.Jaeum.MultiElement[i] == (jong[0], jong[1]):
+                    jong = i
+                    break
+
+        return hangul.join((cho, jung, jong))
+
+    def current(self):
+        return self.stack[0][0] + self.Join(self.stack[0][1])
