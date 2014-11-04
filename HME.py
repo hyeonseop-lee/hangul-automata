@@ -6,11 +6,12 @@ import hangul
 Jaeum = list(u"ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ")
 Moeum = list(u"ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㅐㅔㅒㅖ")
 MultiJaeum = list(u"ㄲㄸㅃㅆㅉ")
+Bksp = list(u"\x7f")
 
 class HME(ME.ME):
     def __init__(self, Chosung=False):
         self.states = list("SVOUAIKNRL")
-        self.voca = Jaeum + Moeum + MultiJaeum
+        self.voca = Jaeum + Moeum + MultiJaeum + Bksp
         self.outp = outp = {}
         self.func = func = {}
         self.init = "S"
@@ -19,6 +20,10 @@ class HME(ME.ME):
         for i in self.states:
             func[i] = {}
             outp[i] = {}
+
+        for i in "VOUAIKNRL":
+            func[i][u"\x7f"] = "S"
+            outp[i][u"\x7f"] = lambda s, v, n: s[1:]
 
         for i in Jaeum + MultiJaeum:
             func["S"][i] = "V"
@@ -77,6 +82,7 @@ class HME(ME.ME):
 
     def move(self, voca, debug=False):
         self.stack = ME.ME.move(self, voca, debug)(self.stack, voca, self.now)
+        self.now = self.stack[0][2]
 
     @classmethod
     def Join(cls, buf):
