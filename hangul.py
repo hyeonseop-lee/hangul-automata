@@ -79,7 +79,7 @@ class Moeum:
     U, WEO, WE, WI, YU, EU, YI, I = Codes
     Jungseong = list(Codes)
     MultiElement = {
-        AE: (A, I),  YAE: (YA, I),  YE: (YEO, I), WA: (O, A),  WAE: (O, A, I),
+        AE: (A, I),  YAE: (YA, I),  YE: (YEO, I), WA: (O, A),  WAE: (O, AE),
         OE: (O, I),  WEO: (U, EO),  WE: (U, E),   WI: (U, I),  YI: (EU, I)
     }
 
