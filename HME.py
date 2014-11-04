@@ -9,6 +9,7 @@ MultiJaeum = list(u"ㄲㄸㅃㅆㅉ")
 Bksp = list(u"\x7f")
 
 class HME(ME.ME):
+# Init HME
     def __init__(self, Chosung=False):
         self.states = list("SVOUAIKNRL")
         self.voca = Jaeum + Moeum + MultiJaeum + Bksp
@@ -81,6 +82,7 @@ class HME(ME.ME):
         self.now = self.init
         self.inp = []
 
+# Move state with a vocabulary; use inherited method
     def move(self, voca, debug=False):
         res = ME.ME.move(self, voca, debug)
         if res:
@@ -88,6 +90,7 @@ class HME(ME.ME):
             self.now = self.stack[0][2]
         return bool(res)
 
+# Join single vocabularies into complete Korean letter
     @classmethod
     def Join(cls, buf, Chosung=False):
         cho, jung, jong, ncho = [], [], [], u""
@@ -137,5 +140,6 @@ class HME(ME.ME):
             res += ncho
         return res
 
+# Return current Korean string
     def current(self):
         return self.stack[0][0] + self.Join(self.stack[0][1], self.Chosung)
