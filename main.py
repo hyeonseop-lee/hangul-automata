@@ -19,6 +19,7 @@ if __name__ == "__main__":
         c = getch.getch()
         if c in asc2han:
             h = asc2han[c]
+            sys.stdout.write("\r" + "  " * len(hme.current()))
             hme.move(h)
             sys.stdout.write("\r" + hme.current())
         else:
