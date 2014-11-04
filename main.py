@@ -1,18 +1,22 @@
 #-*- coding: utf-8 -*-
+import HME
 import sys
-import hangul
+try:
+    import getch
+except ImportError:
+    import msvcrt as getch
+
+asc = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+han = u"ㅂㅈㄷㄱㅅㅛㅕㅑㅐㅔㅁㄴㅇㄹㅎㅗㅓㅏㅣㅋㅌㅊㅍㅠㅜㅡㅃㅉㄸㄲㅆㅛㅕㅑㅒㅖㅁㄴㅇㄹㅎㅗㅓㅏㅣㅋㅌㅊㅍㅠㅜㅡ"
+asc2han = {}
+
+for i in range(52):
+    asc2han[asc[i]] = han[i]
 
 if __name__ == "__main__":
-    s = ''
+    hme = HME.HME()
     while True:
-        s += sys.stdin.read(1)
-        try:
-            u = s.decode('utf-8')
-        except UnicodeDecodeError:
-            pass
-        else:
-            s = ''
-            if hangul.ishangul(u):
-                for i in hangul.split(u):
-                    if i != u'':
-                        print i
+        c = getch.getch()
+        h = asc2han[c]
+        hme.move(h)
+        sys.stdout.write("\r" + hme.current())
