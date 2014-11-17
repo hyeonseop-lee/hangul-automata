@@ -1,7 +1,8 @@
-import DFA
+import NFA
 
-A = DFA.DFA.FromFile("test.json")
-A.query("000", True)
-A.query("011", True)
-A.query("01101101", True)
-A.query("001101010011", True)
+A = NFA.NFA.FromFile("test.json")
+B = A.toDFA()
+B.query("000", True)
+B.query("011", True)
+B.query("01101101", True)
+B.query("001101010011", True)
