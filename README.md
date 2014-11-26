@@ -31,7 +31,7 @@ Run
 ```python
 import NFA
 A = NFA.FromFile("test.json")
-B = A.toDFA()
+B = A.toDFA().minimized()
 print B.query("01011")
 ```
 
