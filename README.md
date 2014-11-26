@@ -9,8 +9,10 @@ Files
 -----
 - DFA.py : DFA Implementation
 - NFA.py : NFA Implementation
-- test.py : Testing code
-- test.json : Test DFA in json form
+- AST.py : Abstract Syntax Tree for regular expression
+- relex.py : lex code with PLY
+- reyacc.py : yacc code with PLY
+- main.py : main code to interact with regular expression
 
 Requirements
 ------------
@@ -28,25 +30,15 @@ pip install -r requirements.txt
 
 Run
 ---
-```python
-import NFA
-A = NFA.FromFile("test.json")
-B = A.toDFA().minimized()
-print B.query("01011")
+```sh
+python main.py
 ```
+Use \e instead of ε, \p instead of ∅. Compiled DFA is expected to process only queries which was conisted of symbols that appeared in reguler expression.
 
-Input
+Usage
 -----
-```json
-{
-	"states": [], // list of states..
-	"voca": [], // list of vocabularies..
-	"func": {
-		"state": {
-			"": ["e-move state"],
-			"vocabulary": ["next state", "next state"]
-		}
-	},
-	"init": "", // an initial state
-	"fini": [] // list of final states..
-}
+```python
+from reyacc import parser
+...
+parser.parse(expression).toNFA().toDFA().minimized().query(querystring)
+```
