@@ -34,6 +34,51 @@ class DFA:
             print "%s : %s" % (repr(inp), r)
         return r
 
+    def minimized(self):
+        def dst(v1, v2, log):
+            if (v2, v1) in log:
+                v1, v2 = v2, v1
+            if (v1, v2) in log:
+                return log[(v1, v2)]
+            if (v1 in self.fini) != (v2 in self.fini):
+                return True
+            log[(v1, v2)] = False
+            for i in self.voca:
+                if i in self.func[v1] and i in self.func[v2]:
+                    if dst(self.func[v1][i], self.func[v2][i], log):
+                        log[(v1, v2)] = True
+                        break
+                elif i in self.func[v1] or i in self.funv[v2]:
+                    log[(v1, v2)] = True
+                    break
+            return log[(v1, v2)]
+        def dfs(now, chk):
+            chk.add(now)
+            for i in self.func[now]:
+                if not self.func[now][i] in chk:
+                    dfs(self.func[now][i], chk)
+        chk = set()
+        log = {}
+        dfs(self.init, chk)
+        dfa = {}
+        dfa["states"] = []
+        for i in chk:
+            for j in dfa["states"]:
+                if not dst(i, j, log):
+                    break
+            else:
+                dfa["states"].append(i)
+        dfa["voca"] = self.voca
+        dfa["func"] = {}
+        dfa["fini"] = []
+        for i in dfa["states"]:
+            dfa["func"][i] = self.func[i]
+            if not dst(self.init, i, log):
+                dfa["init"] = i
+            if i in self.fini:
+                dfa["fini"].append(i)
+        return DFA(dfa)
+
     @classmethod
     def FromJson(cls, obj):
         return cls(json.loads(obj))
