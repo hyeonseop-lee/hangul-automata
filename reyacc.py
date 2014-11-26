@@ -4,6 +4,14 @@ import ply.yacc as yacc
 import AST
 from relex import tokens
 
+def p_expression_epsilon(p):
+    "expression : EPSILON"
+    p[0] = AST.Epsilon()
+
+def p_expression_phi(p):
+    "expression : PHI"
+    p[0] = AST.Phi()
+
 def p_expression_symbol(p):
     "expression : SYMBOL"
     p[0] = AST.Symbol(p[1])
@@ -29,7 +37,7 @@ def p_error(p):
 
 precedence = (
     ("left", "PLUS"),
-    ("left", "SYMBOL"),
+    ("left", "EPSILON", "PHI", "SYMBOL"),
     ("left", "STAR"),
     ("left", "LPAREN", "RPAREN")
 )

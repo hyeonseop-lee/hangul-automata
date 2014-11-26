@@ -1,8 +1,10 @@
 # relex.py
 import ply.lex as lex
 
-tokens = ("PLUS", "STAR", "LPAREN", "RPAREN", "SYMBOL")
+tokens = ("EPSILON", "PHI", "SYMBOL", "PLUS", "STAR", "LPAREN", "RPAREN")
 
+t_EPSILON = r"\\e"
+t_PHI = r"\\p"
 t_PLUS = r"\+"
 t_STAR = r"\*"
 t_LPAREN = r"\("

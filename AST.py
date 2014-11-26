@@ -17,6 +17,19 @@ class Node(object):
         nfa["fini"] = ["q"]
         return NFA.NFA(nfa)
 
+class Epsilon(Node):
+    pass
+
+class Phi(Node):
+    def toNFA(self):
+        nfa = {}
+        nfa["states"] = ["s", "f"]
+        nfa["voca"] = []
+        nfa["func"] = {"s": {}, "f": {}}
+        nfa["init"] = "s"
+        nfa["fini"] = ["f"]
+        return NFA.NFA(nfa)
+
 class Symbol(Node):
     def __init__(self, symbol):
         super(Symbol, self).__init__()
