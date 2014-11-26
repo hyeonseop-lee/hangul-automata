@@ -13,7 +13,7 @@ def p_expression_plus(p):
     p[0] = AST.Plus(p[1], p[3])
 
 def p_expression_concat(p):
-    "expression : expression expression"
+    "expression : expression expression %prec SYMBOL"
     p[0] = AST.Concat(p[1], p[2])
 
 def p_expression_star(p):
@@ -26,5 +26,12 @@ def p_expression_paren(p):
 
 def p_error(p):
     print "syntax error"
+
+precedence = (
+    ("left", "PLUS"),
+    ("left", "SYMBOL"),
+    ("left", "STAR"),
+    ("left", "LPAREN", "RPAREN")
+)
 
 parser = yacc.yacc()
