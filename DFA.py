@@ -24,7 +24,7 @@ class DFA:
             try:
                 s = self.func[s][v]
             except KeyError:
-                return false
+                return False
             else:
                 if debug:
                     print "%s: %s -> %s" % (repr(v), repr(t), repr(s))
