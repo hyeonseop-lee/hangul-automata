@@ -48,7 +48,7 @@ class DFA:
                     if dst(self.func[v1][i], self.func[v2][i], log):
                         log[(v1, v2)] = True
                         break
-                elif i in self.func[v1] or i in self.funv[v2]:
+                elif i in self.func[v1] or i in self.func[v2]:
                     log[(v1, v2)] = True
                     break
             return log[(v1, v2)]
@@ -61,22 +61,20 @@ class DFA:
         log = {}
         dfs(self.init, chk)
         dfa = {}
+        eqv = {}
         dfa["states"] = []
         for i in chk:
             for j in dfa["states"]:
                 if not dst(i, j, log):
+                    eqv[i] = j
                     break
             else:
                 dfa["states"].append(i)
+                eqv[i] = i
         dfa["voca"] = self.voca
-        dfa["func"] = {}
-        dfa["fini"] = []
-        for i in dfa["states"]:
-            dfa["func"][i] = self.func[i]
-            if not dst(self.init, i, log):
-                dfa["init"] = i
-            if i in self.fini:
-                dfa["fini"].append(i)
+        dfa["func"] = {i: {j: eqv[self.func[i][j]] for j in self.func[i]} for i in dfa["states"]}
+        dfa["init"] = eqv[self.init]
+        dfa["fini"] = list(set([eqv[i] for i in self.fini]))
         return DFA(dfa)
 
     @classmethod
