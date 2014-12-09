@@ -3,6 +3,7 @@ import json
 import DFA
 
 class ME(DFA.DFA):
+# Init ME with ME object
     def __init__(self, obj):
         self.states = obj["states"]
         self.voca = obj["voca"]
@@ -16,20 +17,27 @@ class ME(DFA.DFA):
             for v in self.func[s]:
                 assert self.func[s][v] in self.states
 
+        self.now = self.init
+        self.inp = []
+
+# Move state with a vocabulary
+    def move(self, voca, debug=False):
+        last = self.now
+        assert voca in self.voca
+        try:
+            now = self.func[last][voca]
+            res = self.outp[last][voca]
+        except KeyError:
+            if debug:
+                print "%s: %s -> ?" % (repr(voca), repr(self.now))
+            return False
+        else:
+            if debug:
+                print "%s: %s -> %s : %s" % (repr(voca), repr(self.now), repr(now), repr(res))
+            self.now = now
+        return res
+
+# Query with iterable of vocabularies
     def query(self, inp, debug=False):
-        t = s = self.init
-        r = []
-        for v in inp:
-            assert v in self.voca
-            try:
-                s = self.func[s][v]
-                r.append(self.outp[t][v])
-            except KeyError:
-                return r
-            else:
-                if debug:
-                    print "%s: %s -> %s" % (repr(v), repr(t), repr(s))
-                    t = s
-        if debug:
-            print "%s : %s" % (repr(inp), repr(r))
-        return r
+        self.now = self.init
+        return [self.move(v, debug) for v in inp]
