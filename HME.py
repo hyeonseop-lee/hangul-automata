@@ -58,6 +58,7 @@ class HME(ME.ME):
                 func[i][j] = "R"
             for j in u"ㄸㅃㅉ":
                 func[i][j] = "V"
+                outp[i][j] = lambda s, v, n: [(s[0][0] + HME.Join(s[0][1]), [v], n)] + [(s[0][0] + HME.Join(s[0][1]), [], "L")] + s[len(s[0][1]):]
             for j in Jaeum + MultiJaeum:
                 if not j in func[i]:
                     func[i][j] = "L"
