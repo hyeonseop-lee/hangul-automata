@@ -1,11 +1,18 @@
-from reyacc import parser
+#-*- coding: utf-8 -*-
+import HME
+import sys
+try:
+    import getch
+except ImportError:
+    import msvcrt as getch
 
-res = raw_input("Regular Expression: ")
-ast = parser.parse(res)
-nfa = ast.toNFA()
-dfa = nfa.toDFA()
-dfa = dfa.minimized()
+inp = "123qweasdzxc"
 
-while True:
-    req = raw_input("> ")
-    print dfa.query(req)
+if __name__ == "__main__":
+    hme = HME.HME(True)
+    while True:
+        c = getch.getch()
+        if c in inp:
+            sys.stdout.write("\r" + "  " * len(hme.current()))
+            hme.move(c)
+            sys.stdout.write("\r" + hme.current())
