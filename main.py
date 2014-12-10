@@ -6,7 +6,7 @@ try:
 except ImportError:
     import msvcrt as getch
 
-inp = "123qweasdzxc"
+inp = "123qweasdzxc\x7f"
 
 if __name__ == "__main__":
     hme = HME.HME(True)

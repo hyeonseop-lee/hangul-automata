@@ -5,7 +5,7 @@ import ME
 import hangul
 from reyacc import parser
 
-Bksp = list(u"\x7f")
+Bksp = u"\x7f"
 
 Pad = {}
 Pad[u"ㄱ"], Pad[u"ㅋ"], Pad[u"ㄲ"] = "1", "1z", "1c"
@@ -40,7 +40,7 @@ class HME(ME.ME):
     def __init__(self, Choseong = False):
         dfa = parser.parse(Hangul).toNFA().toDFA().minimized()
         self.states = dfa.states
-        self.voca = dfa.voca
+        self.voca = dfa.voca + [Bksp]
         self.func = dfa.func
         self.init = dfa.init
         self.Choseong = Choseong
@@ -57,10 +57,12 @@ class HME(ME.ME):
             "d": lambda s, v, n: [(s[0][0], s[0][1] + [u"ㅣ"], n)] + s,
             "z": lambda s, v, n: [(s[0][0], s[0][1][:-1] + [{u"ㄱ": u"ㅋ", u"ㄴ": u"ㄷ", u"ㄷ": u"ㅌ", u"ㅁ": u"ㅂ", u"ㅂ": u"ㅍ", u"ㅅ": u"ㅈ", u"ㅈ": u"ㅊ", u"ㅇ": u"ㅎ", u"ㅏ": u"ㅑ", u"ㅓ": u"ㅕ", u"ㅗ": u"ㅛ", u"ㅜ": u"ㅠ"}[s[0][1][-1]]], n)] + s[1:],
             "x": lambda s, v, n: [(s[0][0], s[0][1] + [u"ㅡ"], n)] + s,
-            "c": lambda s, v, n: [(s[0][0], s[0][1][:-1] + [{u"ㄱ": u"ㄲ", u"ㄷ": u"ㄸ", u"ㅂ": u"ㅃ", u"ㅅ": u"ㅆ", u"ㅈ": u"ㅉ"}[s[0][1][-1]]], n)] + s[1:]
+            "c": lambda s, v, n: [(s[0][0], s[0][1][:-1] + [{u"ㄱ": u"ㄲ", u"ㄷ": u"ㄸ", u"ㅂ": u"ㅃ", u"ㅅ": u"ㅆ", u"ㅈ": u"ㅉ"}[s[0][1][-1]]], n)] + s[1:],
+            Bksp: lambda s, v, n: s[1:]
         }
         self.outp = {}
         for s in self.func:
+            self.func[s][Bksp] = self.init
             self.outp[s] = {}
             for v in self.func[s]:
                 self.outp[s][v] = out[v]
@@ -98,7 +100,7 @@ class HME(ME.ME):
             (u"ㅂ", u"ㅅ"): u"ㅄ"
         }
         if len(v) == 3 and (v[1], v[2]) in moeum:
-            self.stack = [(s, [v[0], moeum[(v[-2], v[-1])]], n)] + self.stack[1:]
+            self.stack = [(s, [v[0], moeum[(v[-2], v[-1])]], n)] + self.stack[2:]
         elif len(v) == 3 and hangul.isJaeum(v[2]) and v[2] not in hangul.Jongseong:
             s += hangul.join((v[0], v[1], ""))
             self.stack = [(s, [v[2]], n), (s, [], self.init)] + self.stack[3:]
@@ -139,7 +141,7 @@ class HME(ME.ME):
             (u"ㅂ", u"ㅅ"): u"ㅄ"
         }
         if len(v) == 0:
-            return ""
+            return s
         elif len(v) == 1:
             return s + v[0]
         elif len(v) == 2:
