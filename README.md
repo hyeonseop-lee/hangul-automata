@@ -1,4 +1,4 @@
-Korean-Automata
+hangul-automata
 ===============
 
-Korean Automata Project in KAIST CS322, 2014 Fall
+Hangul Automata Project in KAIST CS322, 2014 Fall
